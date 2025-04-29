@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google IMA Player</title>
+    <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+    <style>
+        html, body { margin: 0; padding: 0; height: 100%; }
+        #adContainer { width: 100%; height: 100%; background: black; }
+    </style>
+</head>
+<body>
+    <div id="adContainer"></div>
+    <script>
+        var adContainer = document.getElementById('adContainer');
+        var adDisplayContainer = new google.ima.AdDisplayContainer(adContainer);
+        var adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+
+        adsLoader.addEventListener(
+            google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
+            function(event) {
+                window.adsManager = event.getAdsManager({currentTime: 0});
+                window.adsManager.init(window.innerWidth, window.innerHeight, google.ima.ViewMode.NORMAL);
+                window.adsManager.start();
+            },
+            false
+        );
+
+        adsLoader.addEventListener(
+            google.ima.AdErrorEvent.Type.AD_ERROR,
+            function(event) {
+                console.error('Ad error:', event.getError());
+            },
+            false
+        );
+
+        adDisplayContainer.initialize();
+
+        var adsRequest = new google.ima.AdsRequest();
+        adsRequest.adTagUrl = "https://staging.onead.com.tw/gos/vast/1000135?category=-1&dedicated_pid=1435778";
+        adsRequest.linearAdSlotWidth = window.innerWidth;
+        adsRequest.linearAdSlotHeight = window.innerHeight;
+
+        adsLoader.requestAds(adsRequest);
+    </script>
+</body>
+</html>

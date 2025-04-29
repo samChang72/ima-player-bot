@@ -1,0 +1,13 @@
+{
+  "name": "ima-player-bot-v3",
+  "version": "1.0.0",
+  "description": "Puppeteer service to loop Google IMA ad playing with error reload and logging",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "puppeteer": "^21.3.8"
+  }
+}
