@@ -20,3 +20,4 @@ npm start
 - 播放指定 VAST 廣告
 - 播放錯誤自動 reload 分頁並釋放資源
 - 錯誤事件寫入 ad_log.txt
+

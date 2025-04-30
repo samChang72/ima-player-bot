@@ -5,10 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "push": "git add . && git commit -m 'Auto commit' && git push"
+    "push": "git add . && git commit -m 'Auto commit' && git push",
+    "stop": "lsof -i :4000 | grep LISTEN | awk '{print $2}' | xargs kill -9 || true"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "puppeteer": "^21.3.8"
+    "puppeteer": "^24.7.2"
   }
 }

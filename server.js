@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 4000;
 const PLAYER_URL = `http://localhost:${PORT}/player.html`;
 const LOG_PATH = path.join(__dirname, 'ad_log.txt');
 
@@ -12,6 +12,13 @@ function logToFile(message) {
     const timestamp = new Date().toISOString();
     fs.appendFileSync(LOG_PATH, `[${timestamp}] ${message}\n`);
 }
+
+app.use((req, res, next) => {
+    if (req.hostname === 'localhost') {
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    }
+    next();
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 
