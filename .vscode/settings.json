@@ -1,0 +1,8 @@
+{
+    "liveServer.settings.https": {
+        "enable": true,
+        "cert": "/Users/sam/project/ima-player-bot/ssl/cert.pem",
+        "key": "/Users/sam/project/ima-player-bot/ssl/key.pem"
+    },
+    "liveServer.settings.host": "localhost"
+}

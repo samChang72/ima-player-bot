@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let browser;
 let pages = [];
+let executionCount = 0; // 計數器
 
 async function openPages() {
     pages = [];
@@ -75,10 +76,20 @@ async function startBot() {
 
     await openPages();
 
-    setInterval(async () => {
+    const interval = setInterval(async () => {
+        executionCount++;
+        if (executionCount >= 50) {
+            console.log('Reached 50 executions, shutting down...');
+            logToFile('Reached 50 executions, shutting down...');
+            clearInterval(interval);
+            await closePages();
+            await browser.close();
+            process.exit(0); // 結束應用程式
+        }
+
         await closePages();
         await openPages();
-    }, 20000); // 20 seconds
+    }, 16000); // 16 秒
 }
 
 app.listen(PORT, async () => {
