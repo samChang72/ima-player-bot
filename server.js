@@ -30,6 +30,14 @@ async function openPages() {
     pages = [];
     for (let i = 0; i < 5; i++) {
         const page = await browser.newPage();
+
+        // 監聽新分頁的開啟
+        page.on('popup', async (newPage) => {
+            console.log(`New tab opened: ${newPage.url()}`);
+            logToFile(`New tab opened: ${newPage.url()}`);
+            await newPage.close(); // 關閉新分頁
+        });
+
         page.on('console', async (msg) => {
             const msgText = msg.text();
             if (msgText.includes('Ad error:')) {
@@ -50,7 +58,17 @@ async function openPages() {
                 }
             }
         });
+
         await page.goto(PLAYER_URL, { waitUntil: 'networkidle2' });
+
+        // 模擬點擊導外連結
+        await page.evaluate(() => {
+            const externalLink = document.querySelector('a[target="_blank"]');
+            if (externalLink) {
+                externalLink.click();
+            }
+        });
+
         pages.push(page);
     }
 }

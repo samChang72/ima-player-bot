@@ -25,10 +25,6 @@ function init() {
 function checkMutedAutoplaySupport() {
     videoContent.volume = 0;
     videoContent.muted = true;
-    var playPromise = videoContent.play();
-    if (playPromise !== undefined) {
-      playPromise.then(onMutedAutoplaySuccess).catch(onMutedAutoplayFail);
-    }
   }
 
 /**
@@ -222,6 +218,7 @@ function initializeAd(autoPlay = false) {
 
   // 等待使用者互動後初始化
   const initializeAds = () => {
+    debugger
     adDisplayContainer.initialize();
 
     const adsLoader = new google.ima.AdsLoader(adDisplayContainer);
@@ -232,7 +229,6 @@ function initializeAd(autoPlay = false) {
     adsRequest.setAdWillPlayMuted(true); // 設定廣告靜音播放
 
     adsLoader.requestAds(adsRequest);
-
     adsLoader.addEventListener(
         google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
         (event) => {
@@ -240,14 +236,13 @@ function initializeAd(autoPlay = false) {
           adsManager.init(640, 360, google.ima.ViewMode.NORMAL);
           adsManager.setVolume(0); // 預設靜音
           adsManager.start();
-
           setupControls(); // 設定控制項
         }
     );
   };
 
   if (autoPlay) {
-    checkAutoplaySupport(initializeAds);
+    // checkAutoplaySupport(initializeAds);
   } else {
     adContainer.addEventListener('click', initializeAds, { once: true }); // 確保只執行一次
   }
@@ -257,26 +252,13 @@ function initializeAd(autoPlay = false) {
  * Checks autoplay support and initializes ads if supported.
  * @param {Function} callback
  */
-function checkAutoplaySupport(callback) {
-  const videoContent = document.getElementById('videoContent');
-  const playPromise = videoContent.play();
 
-  if (playPromise !== undefined) {
-    playPromise
-        .then(() => {
-          videoContent.pause();
-          callback(); // 自動播放成功，初始化廣告
-        })
-        .catch(() => {
-          console.warn('自動播放失敗，請使用者互動以啟動廣告');
-        });
-  }
-}
 
 /**
  * Sets up ad controls.
  */
 function setupControls() {
+  
   const playButton = document.getElementById('playButton');
   const pauseButton = document.getElementById('pauseButton');
   const muteButton = document.getElementById('muteButton');
@@ -300,6 +282,8 @@ function setupControls() {
     }
   });
 }
+
+
 
 // Wire UI element references and UI event listeners.
 init();
